@@ -11,23 +11,36 @@ export const Login = () => {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    if (name === 'email') setEmail(value);
-    if (name === 'password') setPassword(value);
+    if (name === 'email') {
+      setEmail(value);
+      console.log(`Email updated: ${value}`); // Debugging email input
+    }
+    if (name === 'password') {
+      setPassword(value);
+      console.log(`Password updated: ${value}`); // Debugging password input
+    }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage('');
+    console.log('Attempting to log in...'); // Debugging form submission
 
     try {
+      console.log(`Sending login request for email: ${email}`);
       const response = await apiClient.post('/api/v1/user/login', { email, password });
 
+      console.log('Response received:', response); // Debugging server response
+
       if (response.status === 200) {
+        console.log('Login successful!');
         setMessage('Login successful!');
         localStorage.setItem('token', response.data.token);
+        console.log('Token saved to localStorage:', response.data.token); // Debugging token storage
         navigate('/employeelist');
       }
     } catch (error) {
+      console.error('Login error:', error); // Debugging error object
       setMessage(
         error.response?.data?.message || 'An error occurred while logging in.'
       );
